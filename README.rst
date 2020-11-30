@@ -834,6 +834,12 @@ Install test requirements:
 
     pip install -r requirements-test.txt
 
+Install pre-push hook:
+
+.. code-block:: shell
+
+    ./pre_push_hook.py --install
+
 Create database:
 
 .. code-block:: shell
