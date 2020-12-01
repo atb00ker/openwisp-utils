@@ -834,7 +834,7 @@ Install test requirements:
 
     pip install -r requirements-test.txt
 
-Set up the pre-push hook to run tests automatically:
+Set up the pre-push hook to run tests and QA checks automatically right before the git push action, so that if anything fails the push operation will be aborted:
 
 .. code-block:: shell
 
