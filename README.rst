@@ -834,11 +834,11 @@ Install test requirements:
 
     pip install -r requirements-test.txt
 
-Install pre-push hook:
+Set up the pre-push hook to run tests automatically:
 
 .. code-block:: shell
 
-    ./pre_push_hook.py --install
+    openwisp-pre-push-hook --install
 
 Create database:
 
