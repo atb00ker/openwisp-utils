@@ -21,6 +21,7 @@ def make_executable(f):
     return err
 
 def run_checks():
+    print("Initializing tests before pushing...")
     try:
         import openwisp_utils
     except:
@@ -28,39 +29,20 @@ def run_checks():
             "'openwisp_utils' failed to import. Make sure all dependencies "
             "are installed and virtual environment is activated."
         )
-    checks = ['run-qa-checks', 'runtests.py', 'runtests']
-    failed_checks = []
 
-    # Run regular tests
-    for check in checks:
-        try:
-            task = subprocess.Popen(f'{REPO_ROOT_DIR}/{check}')
-        except FileNotFoundError:
-            continue
+    # Trigger checks and report if they failed
+    try:
+        task = subprocess.Popen([f'{REPO_ROOT_DIR}/run-qa-checks', '--pre-push'])
         task.communicate()
         if task.returncode:
-            failed_checks.append(check)
-
-    # Run yarn tests, if they exist
-    try:
-        with open(f'{REPO_ROOT_DIR}/package.json') as f:
-            js_tests_command_exists = json.load(f)['scripts']['test']
-        if js_tests_command_exists:
-            task = subprocess.Popen(['yarn', 'test'])
-            task.communicate()
-            if task.returncode:
-                failed_checks.append('yarn test')
-    except:
-        print(f"Skipping javscript checks")
-    
-    # Report the tests that failed
-    if len(failed_checks):
-        print("The following checks failed")
-        print("---------------------------")
-        for check in failed_checks:
-            print(check)
-        print("Please make sure these tests pass, or use '--no-verify' to skip them")
-        sys.exit(1)
+            print("---------------------------")
+            print(
+                "Some checks failed. Please make sure they pass, "
+                "or use '--no-verify' to skip them"
+            )
+            sys.exit(1)
+    except FileNotFoundError:
+        print("Could not access 'run-qa-checks'")
 
 
 def install_hook():
